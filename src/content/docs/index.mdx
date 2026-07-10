@@ -1,0 +1,84 @@
+---
+title: QlipLab
+description: A cross-platform clipboard manager with format detection, one-click transforms, side-by-side diff, snippets, and an AES-256 encrypted vault. Local-first, free, and open source.
+template: splash
+hero:
+  tagline: Everything you copy, kept and made useful. Auto-detects 24 formats, transforms them in one click, diffs any two clips, expands your snippets as you type, and locks your secrets behind AES-256. All on your machine — nothing leaves it.
+  image:
+    file: ../../assets/logo.svg
+  actions:
+    - text: Get started
+      link: /getting-started/
+      icon: right-arrow
+      variant: primary
+    - text: Install
+      link: /installation/
+      icon: down-caret
+      variant: minimal
+    - text: View on GitHub
+      link: https://github.com/omercelikdev/qliplab
+      icon: external
+      variant: minimal
+---
+
+import { Card, CardGrid } from '@astrojs/starlight/components';
+
+## Your clipboard, kept and made useful
+
+The system clipboard holds one thing and forgets it the moment you copy the next. QlipLab keeps the
+history, understands what each clip *is*, and gives you the tools you'd otherwise open a website for —
+without the clip ever leaving your machine.
+
+macOS · Windows · Linux. Free and open source under Apache-2.0.
+
+<CardGrid>
+  <Card title="Clipboard history" icon="list-format">
+    Everything you copy — text, rich text, images — captured, searchable, and pinnable. Sensitive clips
+    are detected and blurred until you hover.
+  </Card>
+  <Card title="24 formats, auto-detected" icon="magnifier">
+    JSON, JWT, Base64, URL, SQL, XML, YAML, UUID, timestamps, colors, CSV, regex, hex, Markdown, and
+    seven programming languages — recognized the instant you copy them.
+  </Card>
+  <Card title="40 one-click transforms" icon="random">
+    Beautify JSON, decode a JWT, convert CSV to JSON, hash a string, change case, sort and dedupe lines —
+    no website, no round-trip. Relevant transforms surface for the detected format.
+  </Card>
+  <Card title="Side-by-side diff" icon="seti:diff">
+    Select any two clips and compare them in a real Monaco diff — side-by-side or inline, with syntax
+    coloring from the detected format.
+  </Card>
+  <Card title="Snippets & text expansion" icon="pencil">
+    Save the things you type constantly and paste them from the panel — or give them a trigger and have
+    them expand inline as you type, anywhere.
+  </Card>
+  <Card title="Encrypted vault" icon="seti:lock">
+    Cards, bank details, addresses, API keys and personal data behind AES-256-GCM. The key never touches
+    disk; the master password is never stored, only a salted hash.
+  </Card>
+  <Card title="Paste back where you were" icon="external">
+    Click a clip and QlipLab returns focus to the app you came from and pastes — like Ditto, on every
+    platform.
+  </Card>
+  <Card title="Local-first, no telemetry" icon="approve-check">
+    No account, no cloud, no analytics. Your clipboard content never leaves the device. Uninstalling
+    removes everything.
+  </Card>
+</CardGrid>
+
+## Nothing leaves your machine
+
+QlipLab has no cloud component. Clipboard history, snippets, settings and the vault all live in local
+storage in the app's own data directory. There is no telemetry and no background data collection.
+
+The only things that ever leave the device are two you turn on yourself: an **opt-in crash report** (off
+by default — an error message and a sanitized stack trace, never clipboard or vault content), and a
+**manual bug report** you type and send. Both go to a small open-source proxy that files a GitHub issue.
+That's the whole list. See [Privacy](/privacy/).
+
+## Built for everyone, sharp for developers
+
+An office worker keeps email templates and addresses a keystroke away. An accountant keeps IBANs and tax
+numbers in the vault. A backend developer beautifies an API response, decodes a token to check its expiry,
+and diffs two responses to find the regression — without leaving the clipboard. Same app, same
+[keyboard shortcuts](/shortcuts/).

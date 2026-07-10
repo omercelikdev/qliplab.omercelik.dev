@@ -1,0 +1,73 @@
+/* Starlight theme for the omercelik.dev design system — the same tokens every product site and
+   dashboard shares (see omercelikdev/mockifyr → docs/design-system.md).
+   Neutral grounds from the grey stack; the accent is --primary (near-black / near-white).
+   --violet stays a single motif (the hero glow), never the accent. */
+
+:root {
+  --sl-font: ui-sans-serif, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', 'Noto Sans', Arial, sans-serif;
+  --sl-font-mono: ui-monospace, 'SF Mono', 'JetBrains Mono', 'Cascadia Code', Menlo, Consolas, monospace;
+  --sl-nav-height: 3.75rem;
+  --mk-radius: 10px;
+  --mk-radius-2xl: 20px;
+  --mk-shadow: 0 1px 2px 0 rgb(24 24 27 / 0.04), 0 3px 14px 0 rgb(24 24 27 / 0.05);
+}
+
+/* Dark (Starlight's default :root) — Mockifyr dark palette; accent = near-white --primary */
+:root {
+  --sl-color-accent-low: #26262b;
+  --sl-color-accent: #f4f4f5;
+  --sl-color-accent-high: #ffffff;
+  --sl-color-text-accent: #f4f4f5;
+  --sl-color-white: #f4f4f5;
+  --sl-color-gray-1: #e4e4e7;
+  --sl-color-gray-2: #a1a1aa;
+  --sl-color-gray-3: #71717a;
+  --sl-color-gray-4: #3f3f46;
+  --sl-color-gray-5: #26262b;
+  --sl-color-gray-6: #17171c;
+  --sl-color-black: #0a0a0c;
+  --mk-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.4);
+}
+
+/* Light — Mockifyr light palette; accent = near-black --primary */
+:root[data-theme='light'] {
+  --sl-color-accent-low: #ececef;
+  --sl-color-accent: #18181b;
+  --sl-color-accent-high: #000000;
+  --sl-color-text-accent: #18181b;
+  --sl-color-white: #18181b;
+  --sl-color-gray-1: #27272a;
+  --sl-color-gray-2: #3f3f46;
+  --sl-color-gray-3: #71717a;
+  --sl-color-gray-4: #a1a1aa;
+  --sl-color-gray-5: #e6e6e9;
+  --sl-color-gray-6: #f5f5f7;
+  --sl-color-gray-7: #ffffff;
+  --sl-color-black: #ffffff;
+}
+
+/* Radius scale — bigger surface, bigger radius (design-system §2.2) */
+.sl-markdown-content :not(pre) > code { border-radius: 6px; }
+.starlight-aside,
+.card { border-radius: var(--mk-radius-2xl); }
+.sl-markdown-content pre { border-radius: 12px; }
+site-search button,
+.action { border-radius: var(--mk-radius) !important; }
+
+/* Cards read like the dashboard's lifted panels: rounded-2xl + border + one whisper shadow */
+.card { box-shadow: var(--mk-shadow); }
+
+/* Primary CTA = the dashboard's primary button: near-black bg / light text (flips in dark).
+   color:bg is the page ground — the accent's opposite — so contrast holds in both themes. */
+.hero .action.primary,
+a.action.primary {
+  background: var(--sl-color-text-accent);
+  color: var(--sl-color-bg);
+  border: 0;
+  font-weight: 600;
+}
+.hero .action.primary:hover { opacity: 0.9; }
+
+/* The one violet motif: a soft glow behind the hero logo (design-system uses --violet as a motif) */
+.hero > img,
+.hero > .hero-html { filter: drop-shadow(0 8px 34px color-mix(in srgb, #7c3aed 26%, transparent)); }
