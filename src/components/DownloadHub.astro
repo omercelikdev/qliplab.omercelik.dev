@@ -1,0 +1,262 @@
+---
+/**
+ * OS-detecting download section.
+ *
+ * Pulls the latest release from the GitHub API at runtime, so the version,
+ * file sizes and asset URLs are always current without rebuilding the site.
+ * The visitor's platform is detected and promoted to a one-click primary
+ * button; the other two stay one click away. Falls back to the releases page
+ * if the API is unreachable.
+ */
+const REPO = 'omercelikdev/qliplab';
+const RELEASES = `https://github.com/${REPO}/releases`;
+---
+
+<section class="dl" data-repo={REPO} aria-label="Download QlipLab">
+  <a class="dl-primary" data-dl="primary" href={`${RELEASES}/latest`}>
+    <span class="dl-primary-icon" data-dl="primary-icon"></span>
+    <span class="dl-primary-text">
+      <span class="dl-primary-label" data-dl="primary-label">Download QlipLab</span>
+      <span class="dl-primary-sub" data-dl="primary-sub">macOS · Windows · Linux</span>
+    </span>
+  </a>
+
+  <div class="dl-grid">
+    <a class="dl-card" data-os="mac" href={`${RELEASES}/latest`}>
+      <svg class="dl-ico" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+      <span class="dl-os">macOS</span>
+      <span class="dl-file" data-dl="file-mac">Universal · Apple Silicon &amp; Intel</span>
+      <span class="dl-size" data-dl="size-mac"></span>
+    </a>
+
+    <a class="dl-card" data-os="win" href={`${RELEASES}/latest`}>
+      <svg class="dl-ico" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.4H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-12.9-1.801"/></svg>
+      <span class="dl-os">Windows</span>
+      <span class="dl-file" data-dl="file-win">64-bit installer</span>
+      <span class="dl-size" data-dl="size-win"></span>
+    </a>
+
+    <a class="dl-card" data-os="linux" href={`${RELEASES}/latest`}>
+      <svg class="dl-ico" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M14.62 8.35c-.42.28-1.75.89-1.75 1.5 0 .55.55.79 1.05 1.03.4.19.79.38.79.72 0 .38-.4.62-.85.62-.53 0-1.05-.35-1.05-.9h-.55c0 .82.72 1.4 1.6 1.4.86 0 1.55-.55 1.55-1.24 0-.62-.55-.93-1.05-1.17-.4-.19-.79-.36-.79-.65 0-.28.32-.45.62-.45.36 0 .62.24.62.55h.55c0-.6-.5-1.05-1.17-1.05-.14 0-.29.02-.42.06M12 1C6.48 1 2 5.48 2 11c0 3.53 1.84 6.63 4.6 8.42-.13-.5-.2-1.02-.2-1.55 0-.36.03-.71.1-1.05C5.02 15.4 4 13.32 4 11c0-4.42 3.58-8 8-8s8 3.58 8 8c0 2.32-1.02 4.4-2.5 5.82.07.34.1.69.1 1.05 0 .53-.07 1.05-.2 1.55C20.16 17.63 22 14.53 22 11c0-5.52-4.48-10-10-10z"/></svg>
+      <span class="dl-os">Linux</span>
+      <span class="dl-file" data-dl="file-linux">AppImage · portable</span>
+      <span class="dl-size" data-dl="size-linux"></span>
+    </a>
+  </div>
+
+  <p class="dl-foot">
+    <span data-dl="version"></span>
+    Every build and past versions on the <a href={RELEASES}>releases page</a>.
+  </p>
+</section>
+
+<script>
+  type Asset = { name: string; browser_download_url: string; size: number };
+  type OS = 'mac' | 'win' | 'linux';
+
+  const OS_LABEL: Record<OS, string> = { mac: 'macOS', win: 'Windows', linux: 'Linux' };
+
+  function detectOS(): OS | null {
+    const p = (
+      (navigator as any).userAgentData?.platform ||
+      navigator.platform ||
+      navigator.userAgent ||
+      ''
+    ).toLowerCase();
+    if (p.includes('mac')) return 'mac';
+    if (p.includes('win')) return 'win';
+    if (p.includes('linux') || p.includes('x11')) return 'linux';
+    return null;
+  }
+
+  function pickAsset(assets: Asset[], os: OS): Asset | undefined {
+    const by = (re: RegExp) => assets.find((a) => re.test(a.name));
+    if (os === 'mac') return by(/\.dmg$/i);
+    if (os === 'win') return by(/-setup\.exe$/i) || by(/\.msi$/i);
+    return by(/\.AppImage$/i) || by(/\.deb$/i);
+  }
+
+  function mb(bytes: number): string {
+    return bytes ? `${(bytes / 1024 / 1024).toFixed(1)} MB` : '';
+  }
+
+  async function loadLatest(repo: string) {
+    const cacheKey = `qlip-release-${repo}`;
+    try {
+      const cached = sessionStorage.getItem(cacheKey);
+      if (cached) return JSON.parse(cached);
+    } catch {}
+    const res = await fetch(`https://api.github.com/repos/${repo}/releases/latest`, {
+      headers: { Accept: 'application/vnd.github+json' },
+    });
+    if (!res.ok) throw new Error(`GitHub API ${res.status}`);
+    const data = await res.json();
+    try {
+      sessionStorage.setItem(cacheKey, JSON.stringify(data));
+    } catch {}
+    return data;
+  }
+
+  (async () => {
+    const root = document.querySelector<HTMLElement>('.dl');
+    if (!root) return;
+    const repo = root.dataset.repo!;
+    const q = <T extends Element = HTMLElement>(sel: string) => root.querySelector<T>(sel);
+
+    const detected = detectOS();
+
+    let release: { tag_name?: string; name?: string; assets?: Asset[] } | null = null;
+    try {
+      release = await loadLatest(repo);
+    } catch {
+      // Leave every link pointing at the releases page (the server-rendered fallback).
+      return;
+    }
+
+    const assets = release?.assets ?? [];
+    const version = (release?.tag_name || release?.name || '').replace(/^v/, '');
+    const versionEl = q('[data-dl="version"]');
+    if (versionEl && version) versionEl.textContent = `Latest v${version}. `;
+
+    const urls: Partial<Record<OS, string>> = {};
+    (['mac', 'win', 'linux'] as OS[]).forEach((os) => {
+      const asset = pickAsset(assets, os);
+      const card = q<HTMLAnchorElement>(`.dl-card[data-os="${os}"]`);
+      const sizeEl = q(`[data-dl="size-${os}"]`);
+      if (asset) {
+        urls[os] = asset.browser_download_url;
+        if (card) card.href = asset.browser_download_url;
+        if (sizeEl) sizeEl.textContent = mb(asset.size);
+      }
+    });
+
+    // Promote the visitor's platform to the primary button.
+    const primary = q<HTMLAnchorElement>('[data-dl="primary"]');
+    const primaryLabel = q('[data-dl="primary-label"]');
+    const primarySub = q('[data-dl="primary-sub"]');
+    const primaryIcon = q('[data-dl="primary-icon"]');
+    if (detected && urls[detected] && primary) {
+      primary.href = urls[detected]!;
+      if (primaryLabel) primaryLabel.textContent = `Download for ${OS_LABEL[detected]}`;
+      const sub = q(`[data-dl="file-${detected}"]`)?.textContent?.trim();
+      if (primarySub && sub) primarySub.textContent = version ? `v${version} · ${sub}` : sub;
+      const icon = q(`.dl-card[data-os="${detected}"] .dl-ico`);
+      if (primaryIcon && icon) primaryIcon.innerHTML = icon.outerHTML;
+      const card = q(`.dl-card[data-os="${detected}"]`);
+      card?.setAttribute('data-current', 'true');
+    } else if (primarySub && version) {
+      primarySub.textContent = `v${version} · macOS · Windows · Linux`;
+    }
+  })();
+</script>
+
+<style>
+  .dl {
+    margin: 2rem 0 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.25rem;
+  }
+
+  /* Two-class selectors (0,2,x) so they beat Starlight's `.sl-markdown-content a`
+     (0,1,1) — Astro scopes with :where(), which adds no specificity. */
+  .dl a.dl-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.85rem 1.5rem;
+    border-radius: var(--mk-radius);
+    background: var(--sl-color-text-accent);
+    color: var(--sl-color-bg);
+    text-decoration: none;
+    font-weight: 600;
+    box-shadow: var(--mk-shadow);
+    transition: opacity 0.15s ease, transform 0.15s ease;
+  }
+  .dl a.dl-primary:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+  }
+  .dl-primary-icon :global(svg) {
+    width: 1.4rem;
+    height: 1.4rem;
+    display: block;
+  }
+  .dl-primary-text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.2;
+  }
+  .dl-primary-label {
+    font-size: 1.05rem;
+  }
+  .dl-primary-sub {
+    font-size: 0.75rem;
+    opacity: 0.75;
+    font-weight: 500;
+  }
+
+  .dl-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.75rem;
+    width: 100%;
+    max-width: 46rem;
+  }
+  @media (max-width: 34rem) {
+    .dl-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .dl a.dl-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 1.1rem 1rem;
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: var(--mk-radius-2xl);
+    background: var(--sl-color-gray-6);
+    text-decoration: none;
+    color: var(--sl-color-white);
+    text-align: center;
+    transition: border-color 0.15s ease, transform 0.15s ease, background 0.15s ease;
+  }
+  .dl a.dl-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--sl-color-gray-3);
+  }
+  .dl a.dl-card[data-current='true'] {
+    border-color: var(--sl-color-text-accent);
+    background: var(--sl-color-gray-7, var(--sl-color-gray-6));
+  }
+  .dl-ico {
+    width: 1.9rem;
+    height: 1.9rem;
+    color: var(--sl-color-white);
+  }
+  .dl-os {
+    font-weight: 600;
+    font-size: 0.95rem;
+    margin-top: 0.15rem;
+  }
+  .dl-file {
+    font-size: 0.72rem;
+    color: var(--sl-color-gray-2);
+  }
+  .dl-size {
+    font-size: 0.72rem;
+    color: var(--sl-color-gray-3);
+    font-variant-numeric: tabular-nums;
+    min-height: 1em;
+  }
+
+  .dl-foot {
+    font-size: 0.8rem;
+    color: var(--sl-color-gray-3);
+    text-align: center;
+    margin: 0;
+  }
+</style>
