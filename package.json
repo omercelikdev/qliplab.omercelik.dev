@@ -6,11 +6,16 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
-    "preview": "astro preview"
+    "preview": "npm run build && wrangler dev",
+    "deploy": "npm run build && wrangler deploy"
   },
   "dependencies": {
+    "@astrojs/cloudflare": "12",
     "@astrojs/starlight": "^0.30.3",
     "astro": "^5.1.1",
     "sharp": "^0.33.5"
+  },
+  "devDependencies": {
+    "wrangler": "^4.110.0"
   }
 }
