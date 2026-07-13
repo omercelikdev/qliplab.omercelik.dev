@@ -1,7 +1,8 @@
-/* Starlight theme for the omercelik.dev design system — the same tokens every product site and
-   dashboard shares (see omercelikdev/mockifyr → docs/design-system.md).
-   Neutral grounds from the grey stack; the accent is --primary (near-black / near-white).
-   --violet stays a single motif (the hero glow), never the accent. */
+/* Starlight theme matched to the QlipLab app's own identity (omercelikdev/qliplab →
+   src/index.css): warm near-black grounds (hue ~20-40, like the app's hsl(20 14% 8%)
+   background) and the app's orange accent (hsl(24 95% 55%) ≈ #F97316 — the same
+   amber→orange gradient the Q logo uses). Layout tokens (radius, shadow) stay on the
+   shared omercelik.dev design system (see omercelikdev/mockifyr → docs/design-system.md). */
 
 :root {
   --sl-font: ui-sans-serif, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', 'Noto Sans', Arial, sans-serif;
@@ -12,38 +13,39 @@
   --mk-shadow: 0 1px 2px 0 rgb(24 24 27 / 0.04), 0 3px 14px 0 rgb(24 24 27 / 0.05);
 }
 
-/* Dark (Starlight's default :root) — Mockifyr dark palette; accent = near-white --primary */
+/* Dark (Starlight's default :root) — the app's dark palette: warm near-black + orange accent */
 :root {
-  --sl-color-accent-low: #26262b;
-  --sl-color-accent: #f4f4f5;
-  --sl-color-accent-high: #ffffff;
-  --sl-color-text-accent: #f4f4f5;
-  --sl-color-white: #f4f4f5;
-  --sl-color-gray-1: #e4e4e7;
-  --sl-color-gray-2: #a1a1aa;
-  --sl-color-gray-3: #71717a;
-  --sl-color-gray-4: #3f3f46;
-  --sl-color-gray-5: #26262b;
-  --sl-color-gray-6: #17171c;
-  --sl-color-black: #0a0a0c;
+  --sl-color-accent-low: #3d1f08;
+  --sl-color-accent: #f97316;
+  --sl-color-accent-high: #fdba74;
+  --sl-color-text-accent: #fb923c;
+  --sl-color-white: #f5f1ea;
+  --sl-color-gray-1: #e7e0d7;
+  --sl-color-gray-2: #a99d8f;
+  --sl-color-gray-3: #766a5d;
+  --sl-color-gray-4: #423a31;
+  --sl-color-gray-5: #272019;
+  --sl-color-gray-6: #171310;
+  --sl-color-black: #0c0a08;
   --mk-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.4);
 }
 
-/* Light — Mockifyr light palette; accent = near-black --primary */
+/* Light — the app's light palette: warm off-white grounds; text accent drops to a darker
+   orange so link contrast holds on the light ground */
 :root[data-theme='light'] {
-  --sl-color-accent-low: #ececef;
-  --sl-color-accent: #18181b;
-  --sl-color-accent-high: #000000;
-  --sl-color-text-accent: #18181b;
-  --sl-color-white: #18181b;
-  --sl-color-gray-1: #27272a;
-  --sl-color-gray-2: #3f3f46;
-  --sl-color-gray-3: #71717a;
-  --sl-color-gray-4: #a1a1aa;
-  --sl-color-gray-5: #e6e6e9;
-  --sl-color-gray-6: #f5f5f7;
+  --sl-color-accent-low: #fdead8;
+  --sl-color-accent: #ea580c;
+  --sl-color-accent-high: #9a3412;
+  --sl-color-text-accent: #c2410c;
+  --sl-color-white: #1c1814;
+  --sl-color-gray-1: #2a251f;
+  --sl-color-gray-2: #443e36;
+  --sl-color-gray-3: #746b60;
+  --sl-color-gray-4: #a8a094;
+  --sl-color-gray-5: #e6e1d8;
+  --sl-color-gray-6: #f5f1ea;
   --sl-color-gray-7: #ffffff;
-  --sl-color-black: #ffffff;
+  --sl-color-black: #fbfaf6;
 }
 
 /* Radius scale — bigger surface, bigger radius (design-system §2.2) */
@@ -57,8 +59,7 @@ site-search button,
 /* Cards read like the dashboard's lifted panels: rounded-2xl + border + one whisper shadow */
 .card { box-shadow: var(--mk-shadow); }
 
-/* Primary CTA = the dashboard's primary button: near-black bg / light text (flips in dark).
-   color:bg is the page ground — the accent's opposite — so contrast holds in both themes. */
+/* Primary CTA = the app's accent button: orange bg, page-ground text (flips with theme). */
 .hero .action.primary,
 a.action.primary {
   background: var(--sl-color-text-accent);
@@ -68,6 +69,3 @@ a.action.primary {
 }
 .hero .action.primary:hover { opacity: 0.9; }
 
-/* The one violet motif: a soft glow behind the hero logo (design-system uses --violet as a motif) */
-.hero > img,
-.hero > .hero-html { filter: drop-shadow(0 8px 34px color-mix(in srgb, #7c3aed 26%, transparent)); }

@@ -1,6 +1,21 @@
-<svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
-  <rect width="32" height="32" rx="8" fill="#18181b"/>
-  <rect x="8" y="7.4" width="16" height="17.4" rx="3" fill="none" stroke="#fff" stroke-width="1.9"/>
-  <rect x="12.6" y="5.1" width="6.8" height="3.9" rx="1.5" fill="#fff"/>
-  <path d="M14.9 12.8 L14.9 14.9 L12.3 19.7 A1.7 1.7 0 0 0 13.8 22.2 L18.2 22.2 A1.7 1.7 0 0 0 19.7 19.7 L17.1 14.9 L17.1 12.8 Z" fill="#fff"/>
+<svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="qlip-bg" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#171310" />
+      <stop offset="100%" stop-color="#0c0a08" />
+    </linearGradient>
+    <linearGradient id="qlip-q" x1="12" y1="1" x2="12" y2="23" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#FBBF24" />
+      <stop offset="50%" stop-color="#F97316" />
+      <stop offset="100%" stop-color="#EA580C" />
+    </linearGradient>
+  </defs>
+  <path
+    d="m12 1c-7.813 0-11 3.187-11 11s3.187 11 11 11 11-3.187 11-11-3.187-11-11-11z"
+    fill="url(#qlip-bg)"
+  />
+  <path
+    d="m12 1c-7.813 0-11 3.187-11 11s3.187 11 11 11 11-3.187 11-11-3.187-11-11-11zm0 21c-7.196 0-10-2.804-10-10s2.804-10 10-10 10 2.804 10 10-2.804 10-10 10zm0-16c-3.505 0-5 1.794-5 6s1.495 6 5 6c1.412 0 2.483-.308 3.277-.931.301.463.569.989.744 1.574.078.267.365.415.623.335.265-.079.415-.357.335-.622-.233-.779-.603-1.451-1.005-2.031.689-.974 1.026-2.382 1.026-4.325 0-4.206-1.495-6-5-6zm1.777 8.084c-.23-.153-.54-.092-.693.139-.153.229-.091.539.138.693.012.008.72.501 1.446 1.35-.629.5-1.494.734-2.668.734-2.916 0-4-1.355-4-5s1.084-5 4-5 4 1.355 4 5c0 1.57-.217 2.693-.679 3.488-.769-.868-1.49-1.368-1.543-1.404z"
+    fill="url(#qlip-q)"
+  />
 </svg>
