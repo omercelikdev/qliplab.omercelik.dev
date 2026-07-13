@@ -1,10 +1,13 @@
 import { defineConfig } from 'astro/config'
 import starlight from '@astrojs/starlight'
 
+import cloudflare from "@astrojs/cloudflare";
+
 // Landing (splash) + docs in one Starlight site, deployed to Cloudflare Pages.
 // Same design standard as the rest of omercelik.dev — see src/styles/qliplab.css.
 export default defineConfig({
   site: 'https://qliplab.omercelik.dev',
+
   integrations: [
     starlight({
       title: 'QlipLab',
@@ -45,4 +48,6 @@ export default defineConfig({
       ],
     }),
   ],
+
+  adapter: cloudflare()
 })
